@@ -70,19 +70,17 @@ export const Controls: React.FC = () => {
   return (
     <Styled.ControlWrapper>
       <Styled.ControlHeader>
+        <Settings
+          onClick={() => navigate("/settings")}
+          size={16}
+          color="#0090e7"
+        />
+
+        <Styled.Title>Task Admin</Styled.Title>
+
         <div>
-          <Settings
-            onClick={() => navigate("/settings")}
-            size={16}
-            color="#0090e7"
-          />
-        </div>
-
-        <TaskStyled.Title>Task Admin</TaskStyled.Title>
-
-        <h2>
           {completedCount}/{taskList.length}
-        </h2>
+        </div>
       </Styled.ControlHeader>
 
       <Styled.ControlTaskListWrapper>

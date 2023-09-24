@@ -5,19 +5,26 @@ export const ControlWrapper = styled.div`
   width: 100vw;
   background: #333;
   padding: 0.625rem;
-
+  font-size: 0.75rem;
   display: grid;
   grid-template-rows: 40px 1fr 80px;
 `;
 
 export const ControlHeader = styled.div`
   display: grid;
-  grid-template-columns: 40px 1fr min-content;
+  grid-template-columns: auto 1fr min-content;
+  grid-gap: 0.5rem;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #8f5fe8;
   padding-bottom: 0.25rem;
   margin-bottom: 0.5rem;
+`;
+
+export const Title = styled.h1`
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
 `;
 
 export const ControlTaskListWrapper = styled.div`
@@ -48,6 +55,7 @@ export const ControlTask = styled.li`
   grid-gap: 0.25rem;
   padding: 0.5rem 0;
   border-bottom: 0.0625rem dashed #0090e7;
+  align-items: center;
 `;
 
 export const TrashWrapper = styled.div`
