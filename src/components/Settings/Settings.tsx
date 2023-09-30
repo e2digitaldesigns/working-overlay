@@ -2,11 +2,10 @@ import React from "react";
 import * as Styled from "./Settings.style";
 import { useNavigate } from "react-router-dom";
 
-import { XCircle, ToggleLeft, ToggleRight } from "react-feather";
+import { XCircle } from "react-feather";
 
 export const Settings: React.FC = () => {
   const navigate = useNavigate();
-  const showSingleWordMessages = false;
 
   const handleClearAllTasks = () => {
     window.localStorage.removeItem("task-list");
@@ -33,25 +32,20 @@ export const Settings: React.FC = () => {
         </Styled.HeaderWrapperGrid>
 
         <Styled.OptionsWrapperGridInner>
-          <div>Show single word messages:</div>
-          <div>{showSingleWordMessages ? <ToggleRight /> : <ToggleLeft />}</div>
-        </Styled.OptionsWrapperGridInner>
-
-        <Styled.OptionsWrapperGridInner>
           <div>Title</div>
-          <div>
-            <button onClick={handleClearAllTasks}>Clear All Task</button>
-          </div>
-        </Styled.OptionsWrapperGridInner>
-
-        <Styled.OptionsWrapperGridInner>
-          <div>Clear Chat</div>
           <div>
             <input
               onChange={handleTitleChange}
               type="text"
               placeholder="Enter Title"
             />
+          </div>
+        </Styled.OptionsWrapperGridInner>
+
+        <Styled.OptionsWrapperGridInner>
+          <div>Clear Chat</div>
+          <div>
+            <button onClick={handleClearAllTasks}>Clear All Task</button>
           </div>
         </Styled.OptionsWrapperGridInner>
       </Styled.SettingsWrapper>
