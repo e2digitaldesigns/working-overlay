@@ -2,23 +2,38 @@ import React from "react";
 import * as Styled from "./Task.styles";
 
 import { CheckSquare, Square } from "react-feather";
+import { BroadcastChannels, StorageKeys, TodoTask } from "../../types";
 
-type TTask = {
-  _id: string;
-  task: string;
-  completed: boolean;
-};
-
-export const Task: React.FC = () => {
-  const [taskList, setTaskList] = React.useState<TTask[]>([]);
+export const Tasks: React.FC = () => {
+  const [taskList, setTaskList] = React.useState<TodoTask[]>([]);
+  const [subTitle, setSubTitle] = React.useState<string>("Task");
 
   React.useEffect(() => {
-    const taskListData = window.localStorage.getItem("task-list");
+    const taskInformation = window.localStorage.getItem(
+      StorageKeys.TaskInformation
+    );
+    if (taskInformation) setSubTitle(JSON.parse(taskInformation).subTitle);
+  }, []);
+
+  React.useEffect(() => {
+    const channel = new BroadcastChannel(BroadcastChannels.Task);
+
+    channel.onmessage = event => {
+      setSubTitle(event.data.subTitle);
+    };
+
+    return () => {
+      channel.close();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    const taskListData = window.localStorage.getItem(StorageKeys.TaskList);
     if (taskListData) setTaskList(JSON.parse(taskListData) || []);
   }, []);
 
   React.useEffect(() => {
-    const channel = new BroadcastChannel("task-list-channel");
+    const channel = new BroadcastChannel(BroadcastChannels.TaskList);
     channel.onmessage = event => {
       setTaskList(event.data.taskList);
     };
@@ -33,7 +48,7 @@ export const Task: React.FC = () => {
   return (
     <Styled.TaskWrapper>
       <Styled.Header>
-        <Styled.Title>!Task</Styled.Title>
+        <Styled.Title>{subTitle}</Styled.Title>
 
         <h2>
           {completedCount}/{taskList.length}

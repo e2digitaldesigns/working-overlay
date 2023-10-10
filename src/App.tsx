@@ -4,19 +4,20 @@ import GlobalStyle from "./globalStyles";
 import { Controls } from "./components/Controls/Controls";
 import { Overlay } from "./components/Overlay/Overlay";
 import { Settings } from "./components/Settings/Settings";
+import { AppRoutes } from "./types";
 
 const App: React.FC = () => {
   const router = createBrowserRouter([
     {
-      path: "/controls",
+      path: AppRoutes.Controls,
       element: <Controls />
     },
     {
-      path: "/overlay",
+      path: AppRoutes.Overlay,
       element: <Overlay />
     },
     {
-      path: "/settings",
+      path: AppRoutes.Settings,
       element: <Settings />
     }
   ]);

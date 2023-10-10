@@ -1,6 +1,7 @@
 import React from "react";
 
 import * as Styled from "./ProjectInfo.style";
+import { BroadcastChannels, StorageKeys } from "../../../types";
 
 export const ProjectInfo: React.FC = () => {
   const [time, setTime] = React.useState<string>("");
@@ -26,13 +27,15 @@ export const ProjectInfo: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    const projectInformation = window.localStorage.getItem("project-info");
+    const projectInformation = window.localStorage.getItem(
+      StorageKeys.ProjectInformation
+    );
     if (projectInformation)
       setTitle(JSON.parse(projectInformation).title || "");
   }, []);
 
   React.useEffect(() => {
-    const channel = new BroadcastChannel("project-info-channel");
+    const channel = new BroadcastChannel(BroadcastChannels.Project);
 
     channel.onmessage = event => {
       setTitle(event.data.title);

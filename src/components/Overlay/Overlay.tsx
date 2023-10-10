@@ -1,6 +1,6 @@
 import React from "react";
 import * as Styled from "./Overlay.style";
-import { Task } from "../TaskList/Task";
+import { Tasks } from "../TaskList/Task";
 import { Camera } from "./Camera/Camera";
 import { ProjectInfo } from "./ProjectInfo/ProjectInfo";
 
@@ -9,7 +9,7 @@ export const Overlay: React.FC = () => {
     <Styled.SidebarWrapper>
       <Camera />
       <ProjectInfo />
-      <Task />
+      <Tasks />
     </Styled.SidebarWrapper>
   );
 };

@@ -2,26 +2,28 @@ import React from "react";
 import * as Styled from "./Controls.styles";
 import * as TaskStyled from "../TaskList/Task.styles";
 import { useNavigate } from "react-router-dom";
+import _cloneDeep from "lodash/cloneDeep";
+import _findIndex from "lodash/findIndex";
 
 import { CheckSquare, Square, Settings, Trash2 } from "react-feather";
-
-type Task = {
-  _id: string;
-  task: string;
-  completed: boolean;
-};
+import {
+  AppRoutes,
+  BroadcastChannels,
+  StorageKeys,
+  TodoTask
+} from "../../types";
 
 export const Controls: React.FC = () => {
   const navigate = useNavigate();
-  const [taskList, setTaskList] = React.useState<Task[]>([]);
+  const [taskList, setTaskList] = React.useState<TodoTask[]>([]);
 
   React.useEffect(() => {
-    const taskListData = window.localStorage.getItem("task-list");
+    const taskListData = window.localStorage.getItem(StorageKeys.TaskList);
     if (taskListData) setTaskList(JSON.parse(taskListData) || []);
   }, []);
 
   React.useEffect(() => {
-    const channel = new BroadcastChannel("task-list-channel");
+    const channel = new BroadcastChannel(BroadcastChannels.TaskList);
     channel.postMessage({ taskList });
 
     return () => {
@@ -42,7 +44,10 @@ export const Controls: React.FC = () => {
       const newTaskList = [...taskList, newTask];
       setTaskList(newTaskList);
 
-      window.localStorage.setItem("task-list", JSON.stringify(newTaskList));
+      window.localStorage.setItem(
+        StorageKeys.TaskList,
+        JSON.stringify(newTaskList)
+      );
       e.currentTarget.value = ``;
     }
   };
@@ -55,23 +60,62 @@ export const Controls: React.FC = () => {
       return item;
     });
     setTaskList(newTaskList);
-    window.localStorage.setItem("task-list", JSON.stringify(newTaskList));
+    window.localStorage.setItem(
+      StorageKeys.TaskList,
+      JSON.stringify(newTaskList)
+    );
   };
 
   const handleDelete = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     const newTaskList = taskList.filter(item => item._id !== id);
     setTaskList(newTaskList);
-    window.localStorage.setItem("task-list", JSON.stringify(newTaskList));
+    window.localStorage.setItem(
+      StorageKeys.TaskList,
+      JSON.stringify(newTaskList)
+    );
   };
 
   const completedCount = taskList.filter(item => item.completed).length;
+
+  const handleDragStart = (e: React.DragEvent<HTMLLIElement>, _id: string) => {
+    e.stopPropagation();
+    e.dataTransfer.setData("_id", _id);
+  };
+
+  const handleDropTopic = async (
+    e: React.DragEvent<HTMLLIElement>,
+    _id: string
+  ): Promise<void> => {
+    e.preventDefault();
+    const dragId = e.dataTransfer.getData("_id");
+    if (dragId === _id) return;
+
+    const tempTask = _cloneDeep(taskList);
+
+    const dragIndex = _findIndex(tempTask, (f: TodoTask) => f._id === dragId);
+    const dropIndex = _findIndex(tempTask, (f: TodoTask) => f._id === _id);
+    const dragTask = tempTask[dragIndex];
+
+    if (dragIndex > dropIndex) {
+      tempTask.splice(dragIndex, 1);
+      tempTask.splice(dropIndex, 0, dragTask);
+    }
+
+    if (dragIndex < dropIndex) {
+      tempTask.splice(dropIndex + 1, 0, dragTask);
+      tempTask.splice(dragIndex, 1);
+    }
+
+    setTaskList(tempTask);
+    window.localStorage.setItem(StorageKeys.TaskList, JSON.stringify(tempTask));
+  };
 
   return (
     <Styled.ControlWrapper>
       <Styled.ControlHeader>
         <Settings
-          onClick={() => navigate("/settings")}
+          onClick={() => navigate(AppRoutes.Settings)}
           size={16}
           color="#0090e7"
         />
@@ -89,6 +133,16 @@ export const Controls: React.FC = () => {
             <Styled.ControlTask
               key={item._id}
               onClick={() => handleCompleteToggle(item._id)}
+              draggable={true}
+              onDragStart={(e: React.DragEvent<HTMLLIElement>) =>
+                handleDragStart(e, item._id)
+              }
+              onDragOver={e => {
+                e.preventDefault();
+              }}
+              onDrop={(e: React.DragEvent<HTMLLIElement>) =>
+                handleDropTopic(e, item._id)
+              }
             >
               <TaskStyled.IconWrapper>
                 {item.completed ? (
@@ -113,8 +167,6 @@ export const Controls: React.FC = () => {
       </Styled.ControlTaskListWrapper>
 
       <Styled.TextArea onKeyDown={handleAddTask} />
-
-      {/* <Styled.Button onClick={handleClear}>Clear</Styled.Button> */}
     </Styled.ControlWrapper>
   );
 };
