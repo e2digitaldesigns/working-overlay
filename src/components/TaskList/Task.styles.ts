@@ -1,14 +1,11 @@
 import styled from "styled-components";
 
 export const TaskWrapper = styled.div`
-  box-sizing: border-box;
   position: absolute;
   top: 430px;
   left: 10px;
-  z-index: 1000;
   width: 270px;
   height: 620px;
-  padding: 10px;
   border-bottom: 2px solid #8f5fe8;
 `;
 
@@ -17,11 +14,16 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #8f5fe8;
-  padding-bottom: 0.25rem;
-  margin-bottom: 0.5rem;
+  height: 40px;
 `;
 
 export const Title = styled.h1`
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #fff;
+`;
+
+export const TaskCount = styled.h1`
   font-size: 1.25rem;
   font-weight: 500;
   color: #fff;

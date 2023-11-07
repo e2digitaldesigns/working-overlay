@@ -51,14 +51,15 @@ export const ControlTaskListWrapper = styled.div`
 
 export const ControlTask = styled.li`
   display: grid;
-  grid-template-columns: 2rem 1fr 2rem;
+  grid-template-columns: 2rem 1fr 2rem 2rem;
   grid-gap: 0.25rem;
   padding: 0.5rem 0;
   border-bottom: 0.0625rem dashed #0090e7;
   align-items: center;
 `;
 
-export const TrashWrapper = styled.div`
+export const TaskIconWrapper = styled.div`
+  cursor: pointer;
   :hover {
     * {
       color: #fc424a;
@@ -81,7 +82,7 @@ export const TextArea = styled.textarea`
   color: #fff;
   border: 0.0625rem dashed #8f5fe8;
   font-size: 1rem;
-  padding: 0.5rem;
+  padding: 0.25rem;
   width: 100%;
   resize: none;
   outline: none;

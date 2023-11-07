@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import _cloneDeep from "lodash/cloneDeep";
 import _findIndex from "lodash/findIndex";
 
-import { CheckSquare, Square, Settings, Trash2 } from "react-feather";
+import { Activity, CheckSquare, Square, Settings, Trash2 } from "react-feather";
 import {
   AppRoutes,
   BroadcastChannels,
@@ -16,6 +16,7 @@ import {
 export const Controls: React.FC = () => {
   const navigate = useNavigate();
   const [taskList, setTaskList] = React.useState<TodoTask[]>([]);
+  const [newTaskText, setNewTaskText] = React.useState<string>("");
 
   React.useEffect(() => {
     const taskListData = window.localStorage.getItem(StorageKeys.TaskList);
@@ -31,13 +32,15 @@ export const Controls: React.FC = () => {
     };
   }, [taskList]);
 
-  const handleAddTask = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    const task = e.currentTarget.value;
+  const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewTaskText(e.currentTarget.value);
+  };
 
-    if (e.key === "Enter" && !e.shiftKey && task) {
+  const handleAddTask = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey && newTaskText) {
       const newTask = {
         _id: new Date().getTime().toString(),
-        task,
+        task: newTaskText,
         completed: false
       };
 
@@ -48,7 +51,8 @@ export const Controls: React.FC = () => {
         StorageKeys.TaskList,
         JSON.stringify(newTaskList)
       );
-      e.currentTarget.value = ``;
+
+      setNewTaskText("");
     }
   };
 
@@ -59,6 +63,25 @@ export const Controls: React.FC = () => {
       }
       return item;
     });
+    setTaskList(newTaskList);
+    window.localStorage.setItem(
+      StorageKeys.TaskList,
+      JSON.stringify(newTaskList)
+    );
+  };
+
+  const handleSetCurrent = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+
+    const newTaskList = taskList.map(item => {
+      if (item._id === id) {
+        item.currentTask = !item.currentTask;
+      } else {
+        item.currentTask = false;
+      }
+      return item;
+    });
+
     setTaskList(newTaskList);
     window.localStorage.setItem(
       StorageKeys.TaskList,
@@ -158,15 +181,30 @@ export const Controls: React.FC = () => {
               >
                 {item.task}
               </div>
-              <Styled.TrashWrapper onClick={e => handleDelete(e, item._id)}>
+
+              <Styled.TaskIconWrapper
+                onClick={e => handleSetCurrent(e, item._id)}
+              >
+                {item?.currentTask ? (
+                  <Activity size={16} color="#0090e7" />
+                ) : (
+                  <Activity size={16} color="#888" />
+                )}
+              </Styled.TaskIconWrapper>
+
+              <Styled.TaskIconWrapper onClick={e => handleDelete(e, item._id)}>
                 <Trash2 size={16} />
-              </Styled.TrashWrapper>
+              </Styled.TaskIconWrapper>
             </Styled.ControlTask>
           ))}
         </TaskStyled.TaskList>
       </Styled.ControlTaskListWrapper>
 
-      <Styled.TextArea onKeyDown={handleAddTask} />
+      <Styled.TextArea
+        onChange={handleOnChange}
+        onKeyDown={handleAddTask}
+        value={newTaskText}
+      />
     </Styled.ControlWrapper>
   );
 };

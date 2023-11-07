@@ -13,6 +13,7 @@ export enum StorageKeys {
 export type TodoTask = {
   _id: string;
   task: string;
+  currentTask?: boolean;
   completed: boolean;
 };
 

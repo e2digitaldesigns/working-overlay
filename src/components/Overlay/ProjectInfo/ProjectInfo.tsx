@@ -53,7 +53,7 @@ export const ProjectInfo: React.FC = () => {
       </Styled.Date>
 
       <Styled.Project>
-        <span>Project:</span> {title}
+        <span>Project: </span> {title}
       </Styled.Project>
     </Styled.ProjectInfoWrapper>
   );

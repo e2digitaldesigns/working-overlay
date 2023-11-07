@@ -50,9 +50,9 @@ export const Tasks: React.FC = () => {
       <Styled.Header>
         <Styled.Title>{subTitle}</Styled.Title>
 
-        <h2>
+        <Styled.TaskCount>
           {completedCount}/{taskList.length}
-        </h2>
+        </Styled.TaskCount>
       </Styled.Header>
 
       <Styled.TaskList>
