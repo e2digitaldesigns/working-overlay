@@ -38,14 +38,19 @@ export const TaskList = styled.ul`
 export const Task = styled.li`
   display: grid;
   grid-template-columns: 2rem 1fr;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
   border-bottom: 0.0625rem dashed #0090e7;
 `;
 
 export const IconWrapper = styled.div`
   display: flex;
-  justify-content: center;
-  padding-top: 0.17rem;
+  align-items: center;
+
+  > svg {
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
 `;
 
 export const TaskText = styled.div`

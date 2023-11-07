@@ -5,7 +5,14 @@ import { useNavigate } from "react-router-dom";
 import _cloneDeep from "lodash/cloneDeep";
 import _findIndex from "lodash/findIndex";
 
-import { Activity, CheckSquare, Square, Settings, Trash2 } from "react-feather";
+import {
+  Activity,
+  CheckSquare,
+  Square,
+  Settings,
+  Trash2,
+  Clock
+} from "react-feather";
 import {
   AppRoutes,
   BroadcastChannels,
@@ -174,13 +181,26 @@ export const Controls: React.FC = () => {
                   <Square size={16} />
                 )}
               </TaskStyled.IconWrapper>
-              <div
-                style={{
-                  textDecoration: item.completed ? "line-through" : "none"
-                }}
-              >
-                {item.task}
+              <div>
+                <div
+                  style={{
+                    textDecoration: item.completed ? "line-through" : "none"
+                  }}
+                >
+                  {item.task}
+                </div>
+                <div>00:00:00</div>
               </div>
+
+              <Styled.TaskIconWrapper
+                onClick={e => handleSetCurrent(e, item._id)}
+              >
+                {item.completed ? (
+                  <Clock size={16} color="#0090e7" />
+                ) : (
+                  <Clock size={16} />
+                )}
+              </Styled.TaskIconWrapper>
 
               <Styled.TaskIconWrapper
                 onClick={e => handleSetCurrent(e, item._id)}

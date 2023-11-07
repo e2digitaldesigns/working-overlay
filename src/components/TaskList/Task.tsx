@@ -71,7 +71,7 @@ export const Tasks: React.FC = () => {
                 textDecoration: item.completed ? "line-through" : "none"
               }}
             >
-              {item.task}
+              {item.task} tr
             </Styled.TaskText>
           </Styled.Task>
         ))}

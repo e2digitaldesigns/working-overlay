@@ -5,7 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { XCircle } from "react-feather";
 import { AppRoutes, BroadcastChannels, StorageKeys } from "../../types";
 
-export const Settings: React.FC = () => {
+interface ISettingsProps {
+  globalInformation: any;
+  handleCheckBoxChange: any;
+}
+
+export const Settings: React.FC<ISettingsProps> = ({
+  globalInformation,
+  handleCheckBoxChange
+}) => {
   const navigate = useNavigate();
   const [subTitle, setSubTitle] = React.useState<string>("Task");
   const [title, setTitle] = React.useState<string>("");
@@ -14,6 +22,7 @@ export const Settings: React.FC = () => {
     const taskInformation = window.localStorage.getItem(
       StorageKeys.TaskInformation
     );
+
     const projectInformation = window.localStorage.getItem(
       StorageKeys.ProjectInformation
     );
@@ -86,7 +95,19 @@ export const Settings: React.FC = () => {
         </Styled.OptionsWrapperGridInner>
 
         <Styled.OptionsWrapperGridInner>
-          <div>Clear Chat</div>
+          <div>Show Timer</div>
+          <div>
+            <input
+              checked={globalInformation.showTimer}
+              name="showTimer"
+              onChange={handleCheckBoxChange}
+              type="checkbox"
+            />
+          </div>
+        </Styled.OptionsWrapperGridInner>
+
+        <Styled.OptionsWrapperGridInner>
+          <div>Clear Task</div>
           <div>
             <button onClick={handleClearAllTasks}>Clear All Task</button>
           </div>
